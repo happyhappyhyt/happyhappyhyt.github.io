@@ -1,0 +1,45 @@
+---
+title: begin
+date: 2024-07-29 14:57:36
+tags:
+  - begin
+---
+# Spring事务管理&AOP
+## 事务管理
+![](begin/Pasted%20image%2020240724184433.png)
++ 问题：删除部门时对应的员工需要被删除，但是如图会出现数据不一致的错误，所以要开启事务（所有命令要么同时成功，要么同时失败，且失败时进行事务回滚）
+![](noteImg/Pasted%20image%2020240724184632.png)
++ Spring框架事务管理注释：
+一般是在业务出现多次增删改操作时才会使用的
+![](noteImg/Pasted%20image%2020240725115318.png)
++ 添加Spring基于事务管理的日志配置：
+```python
+#spring事务管理日志
+
+logging:
+
+  level:
+
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+```
+![](noteImg/Pasted%20image%2020240725120907.png)
+## 事务传播
+![](noteImg/Pasted%20image%2020240725121431.png)
+![](noteImg/Pasted%20image%2020240725154847.png)
+注意，在delete方法中注入的是Ser层的而不是Mapper层的
+完善注释后表示会新建一个事务，及当前的事务调用失败实现回滚时不会影响insert插入日志这一事务
+![](noteImg/Pasted%20image%2020240725155141.png)
+## AOP基础
+![](noteImg/Pasted%20image%2020240726122152.png)
+
+步骤
+![](noteImg/Pasted%20image%2020240726123005.png)
+@Aspect说明这个不是普通类，是AOP类；@Around是指明该类所控制的具体方法
+![](noteImg/Pasted%20image%2020240726172107.png)
+## AOP核心
+![](noteImg/Pasted%20image%2020240726180202.png)
+![](noteImg/Pasted%20image%2020240726180348.png)
+使用AOP代理之后会对目标对象生成一个代理对象，于是在Con层调用方法时就会自动变成使用代理对象的方法（此时的对象是经过增强的，即会记录方法的执行时间）
+## AOP进阶
+### 通知类型
+![](noteImg/Pasted%20image%2020240726205334.png)
